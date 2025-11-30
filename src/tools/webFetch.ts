@@ -1,0 +1,3 @@
+/*
+    The web fetch tool allows your agent to retrieve full content from specified web pages and PDF documents.
+*/

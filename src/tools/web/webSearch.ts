@@ -1,6 +1,16 @@
 /*
-    The web search tool that allows the agent to screen scrape the non-JS, web version of DuckDuckGo
+  src/tools/web/websearch.ts
+  
+  The web search tool that allows the agent to screen scrape the non-JS, web version of DuckDuckGo.
+  This tool returns an array of 10 results.
+  Each result object contains a title, url, and snippet.
+  {
+    title: string;
+    url: string;
+    snippet: string;
+  }
 */
+
 import * as cheerio from "cheerio";
 
 type Result = {
@@ -10,6 +20,12 @@ type Result = {
 };
 
 type SearchResults = Array<Result>;
+
+export async function webSearch(query: string): Promise<SearchResults> {
+  const html = await fetchFromDuckDuckGo(query);
+  const parsedResults = parseDuckDuckGoHtml(html);
+  return parsedResults;
+}
 
 async function fetchFromDuckDuckGo(query: string): Promise<string> {
   const response = await fetch(`https://html.duckduckgo.com/html/?q=${query}`);

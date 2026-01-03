@@ -1,7 +1,7 @@
 /*
-Shared types in the llms module
+  src/llmProvider/types.ts
+  Shared types in the llms module
 */
-import { Readable } from "stream";
 
 export type LlmResponse = {
   content: string;
@@ -14,10 +14,6 @@ export type LlmResponseContent = string;
 
 export type LlmResponseStream = {
   content: Promise<ReadableStream>;
-};
-
-export type LlmConfig = {
-  model: string; // e.g. 'llama3-groq-tool-use:8b' or 'deepseek-r1:7b'
 };
 
 export type Message = {
@@ -39,23 +35,9 @@ export type Tool = {
 };
 
 export type ChatRequest = {
-  model: string;
   messages: Array<Message>;
   format?: string; // Set the expected format of the response
   stream?: boolean;
   tools?: Tool[];
   think?: boolean;
 };
-
-export type ChatResponse = Promise<string | Readable>;
-
-export type LlmProvider = {
-  chat: (request: ChatRequest) => ChatResponse;
-};
-
-export type Result<T> = { ok: true; value: T } | { ok: false; error: Error };
-
-export type SafeLlmProvider = (
-  prompt: string,
-  config: LlmConfig,
-) => Promise<Result<LlmResponse>>;

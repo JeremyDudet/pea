@@ -1,31 +1,23 @@
-import { providerRegistry } from "./src/llmProviders";
-import type { ChatRequest, Message } from "./src/llmProviders/types";
+/*
+  index.ts
+  root of the application 
+*/
 
-console.log("Starting program...");
+import { PlanAndExecuteAgent } from "./src/agents";
+import { ollama } from "./src/llmProviders";
+import { createAgent } from "./src/agents/utils";
 
-const llm = providerRegistry["ollama"];
+const myAgent = createAgent({
+  agentType: "planAndExecute",
+  llmProvider: "ollama",
+  model: "llama3-groq-tool-use:8b",
+  tools: {},
+  // agentInstructions: myAgentInstructions;
+});
 
-const messages: Array<Message> = [
-  {
-    role: "system",
-    content: ``,
-  },
-  {
-    role: "user",
-    content: `
-      In what circumstances are you, the llm, intentionally allowed to lie?
-    `,
-  },
-];
-
-const request: ChatRequest = {
-  model: "llama3.2:3b",
-  messages: messages,
-  stream: true,
-  // format: "json",
-};
-
-const response = await llm.chat(request);
+const response = await myAgent.generate({
+  prompt: "Who are you?",
+});
 
 for await (const part of response) {
   process.stdout.write(part);

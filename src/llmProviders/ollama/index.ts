@@ -1,24 +1,15 @@
 /*
+    src/llmProviders/ollama/index.ts
     Ollama specific adapter for locally running LLMs
 */
 
 import ollama from "ollama";
-import type {
-  LlmConfig,
-  LlmProvider,
-  ChatRequest,
-  ChatResponse,
-} from "../types";
 import { Readable } from "stream";
 
-export type OllamaConfig = LlmConfig & {
-  stream?: boolean; // Default: false
-};
-
-export function ollamaProvider(): LlmProvider {
-  async function chat(request: ChatRequest): ChatResponse {
+export function ollamaProvider(model: string) {
+  async function generateText(request: any): Promise<Readable> {
     const response = await ollama.chat({
-      model: request.model,
+      model,
       messages: request.messages,
       stream: true,
       tools: request.tools,
@@ -57,9 +48,7 @@ export function ollamaProvider(): LlmProvider {
     return responseStream;
   }
 
-  async function embed() {}
-
   return {
-    chat,
+    generateText,
   };
 }

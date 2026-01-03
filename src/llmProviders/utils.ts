@@ -1,3 +1,0 @@
-/*
-    Helper functions specific to LLM directory
-*/
